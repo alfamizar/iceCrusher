@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Ice Crusher</string>
+    <string name="main_activity_app_name">ICEBERG CRUSHER</string>
+    <string name="results_format">Shots fired: %1$d\nTotal time: %2$.1f</string>
+    <string name="reset_game">Reset Game</string>
+    <string name="win">You win!</string>
+    <string name="play">Play</string>
+    <string name="high_score">High Score: </string>
+    <string name="crushed">Crushed: </string>
+    <string name="missed">Missed: </string>
+    <string name="lose">You lose!</string>
+    <string name="time_remaining_format">Time remaining: %.1f seconds</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

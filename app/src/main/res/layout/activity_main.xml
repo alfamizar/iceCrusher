@@ -20,6 +20,7 @@
         android:textColor="#ffffff"
         android:layout_above="@id/play"
         android:layout_below="@id/highScoreTxt"
+        android:id="@+id/appname"
         android:layout_centerHorizontal="true"/>
 
     <TextView
@@ -40,5 +41,15 @@
         android:id="@+id/highScoreTxt"
         android:layout_margin="16dp"
         android:layout_alignParentStart="true"/>
+
+    <ImageView
+        android:id="@+id/menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_baseline_menu_24"
+        android:scaleType="centerCrop"/>
+
 
 </RelativeLayout>

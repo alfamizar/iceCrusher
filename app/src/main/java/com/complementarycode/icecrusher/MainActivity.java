@@ -34,6 +34,13 @@ public class MainActivity extends AppCompatActivity {
         highScoreTxt = findViewById(R.id.highScoreTxt);
 
         prefs = getSharedPreferences("game", MODE_PRIVATE);
+
+        findViewById(R.id.menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, Menu.class));
+            }
+        });
         updateHighScore();
     }
 

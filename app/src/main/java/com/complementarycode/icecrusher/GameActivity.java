@@ -3,6 +3,7 @@ package com.complementarycode.icecrusher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 public class GameActivity extends AppCompatActivity {
 
     private GameView gameView;
+    private MediaPlayer backgroundMusic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,9 @@ public class GameActivity extends AppCompatActivity {
 //            }
 //        });
 
+        backgroundMusic = MediaPlayer.create(GameActivity.this, R.raw.backgroundmusic);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.start();
         setContentView(gameView);
     }
 
@@ -39,11 +44,19 @@ public class GameActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         gameView.pause();
+        backgroundMusic.release();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         gameView.resume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //backgroundMusic.stop();
+        //backgroundMusic.release();
     }
 }

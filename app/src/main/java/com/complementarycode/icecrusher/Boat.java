@@ -10,6 +10,12 @@ import static com.complementarycode.icecrusher.GameView.screenRatioY;
 public class Boat extends GameElement {
 
     boolean isGoingUp = false, isGoingDown = false;
+
+    public int getHealth() {
+        return health;
+    }
+
+    private int health = 3;
     Bitmap boat;
     private GameView gameView;
 
@@ -32,6 +38,10 @@ public class Boat extends GameElement {
 
         y = screenY / 2;
         x = (int) (64 * screenRatioX);
+    }
+
+    public void reduceHealth(){
+        health--;
     }
 
     Bitmap getGameElement() {

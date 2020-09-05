@@ -9,6 +9,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.media.AudioAttributes;
+import android.media.AudioManager;
+import android.media.SoundPool;
+import android.os.Build;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
@@ -32,17 +36,22 @@ public class GameView extends SurfaceView implements Runnable {
     private static final float TOUCH_TOLERANCE = 10;
 
     private static final String DEBUG_TAG = "LOL";
+    private final SoundPool soundPool;
     private Thread thread;
     private boolean isPlaying, isGameOver = false;
     private int screenX, screenY, score = 0;
     public static float screenRatioX, screenRatioY;
     private Paint paint;
     private Iceberg[] icebergs;
-    private int numberOfIcebergs = 6; int missed = 0;
+    private Animal[] animals;
+    //private List<Health> health;
+    private int numberOfIcebergs = 6, numberOfAnimals = 4; int missed = 0;
     //private SharedPreferences prefs;
     private Random random;
+    int sound;
     private List<Torpedo> torpedoes;
     private Boat boat;
+    private Health health;
     private GameActivity activity;
     private Background background1, background2;
     private static final int MAX_FRAME_RATE = (int) (1000.0 / 60.0);
@@ -80,6 +89,14 @@ public class GameView extends SurfaceView implements Runnable {
         paint.setColor(Color.WHITE);
 
         icebergs = new Iceberg[numberOfIcebergs];
+        animals = new Animal[numberOfAnimals];
+
+//        for (int i = 0; i < boat.getHealth(); i++) {
+//            Health heart = new Health(screenY, getResources());
+//            health.add(heart);
+//        }
+
+        health = new Health(screenY, getResources());
 
         for (int i = 0; i < numberOfIcebergs; i++) {
 
@@ -87,6 +104,29 @@ public class GameView extends SurfaceView implements Runnable {
             icebergs[i] = iceberg;
 
         }
+        for (int i = 0; i < numberOfAnimals; i++) {
+
+            Animal animal = new Animal(getResources());
+            animals[i] = animal;
+
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                    .setUsage(AudioAttributes.USAGE_GAME)
+                    .build();
+
+            soundPool = new SoundPool.Builder()
+                    .setAudioAttributes(audioAttributes)
+                    .build();
+
+        } else
+            soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 0);
+
+        sound = soundPool.load(activity, R.raw.shoot, 1);
+
         random = new Random();
     }
 
@@ -179,6 +219,18 @@ public class GameView extends SurfaceView implements Runnable {
 //                    iceberg.wasShot = true;
 //                }
             }
+            for (Animal animal : animals)
+            {
+                if (Rect.intersects(animal.getCollisionShape(),
+                        torpedo.getCollisionShape())) {
+                    if (CollisionUtil.isCollisionDetected(animal.getGameElement(), animal.x, animal.y,
+                            torpedo.getGameElement(), torpedo.x, torpedo.y)) {
+
+                        isGameOver = true;
+                        return;
+                    }
+                }
+            }
         }
 
 //        for (Torpedo torpedo : trash)
@@ -203,7 +255,7 @@ public class GameView extends SurfaceView implements Runnable {
                     missed++;
                 }
 
-                int bound = (int) (20 * screenRatioX);
+                int bound = (int) (15 * screenRatioX);
                 iceberg.speed = random.nextInt(bound);
 
                 if (iceberg.speed < 5 * screenRatioX)
@@ -219,6 +271,46 @@ public class GameView extends SurfaceView implements Runnable {
 
             if (Rect.intersects(iceberg.getCollisionShape(), boat.getCollisionShape())) {
                 if (CollisionUtil.isCollisionDetected(iceberg.getGameElement(), iceberg.x, iceberg.y,
+                        boat.getGameElement(), boat.x, boat.y)) {
+                    boat.reduceHealth();
+//                    if (boat.getHealth() < 0){
+//                        isGameOver = true;
+//                        return;
+//                    }
+                    isGameOver = true;
+                    return;
+                }
+//                isGameOver = true;
+//                return;
+            }
+
+        }
+
+        for (Animal animal : animals){
+//                if (Rect.intersects(iceberg.getCollisionShape(),
+//                        torpedo.getCollisionShape())) {
+            //Iceberg iceberg = icebergs[i];
+
+            animal.x -= animal.speed;
+
+            if (animal.x + animal.width < 0) {
+
+                int bound = (int) (5 * screenRatioX);
+                animal.speed = random.nextInt(bound);
+
+                if (animal.speed < 1 * screenRatioX)
+                    animal.speed = (int) (5 / 2f * screenRatioX);
+
+                animal.x = screenX;
+                animal.y = random.nextInt(screenY - animal.height);
+
+                animal.wasShot = false;
+            }
+
+
+
+            if (Rect.intersects(animal.getCollisionShape(), boat.getCollisionShape())) {
+                if (CollisionUtil.isCollisionDetected(animal.getGameElement(), animal.x, animal.y,
                         boat.getGameElement(), boat.x, boat.y)) {
                     isGameOver = true;
                     return;
@@ -242,6 +334,10 @@ public class GameView extends SurfaceView implements Runnable {
             for (int i = 0; i < numberOfIcebergs; i++) {
                 Iceberg iceberg = icebergs[i];
                 canvas.drawBitmap(iceberg.getGameElement(), iceberg.x, iceberg.y, paint );
+            }
+            for (int i = 0; i < numberOfAnimals; i++) {
+                Animal animal = animals[i];
+                canvas.drawBitmap(animal.getGameElement(), animal.x, animal.y, paint );
             }
 
             if (isGameOver) {
@@ -448,6 +544,9 @@ public class GameView extends SurfaceView implements Runnable {
 //    }
 
     public void newTorpedo() {
+
+        soundPool.play(sound, 1, 1, 0, 0, 1);
+
         Torpedo torpedo = new Torpedo(getResources());
         torpedo.x = boat.x + boat.width;
         torpedo.y = boat.y + (boat.height / 2);

@@ -132,10 +132,10 @@ public class GameView extends SurfaceView implements Runnable {
             background2.x = background1.x + background1.background.getWidth();
         }
 
-//        if (boat.isGoingUp)
-//            boat.y -= 25 * screenRatioY;
-//        else
-//            boat.y += 25 * screenRatioY;
+        if (boat.isGoingUp && !boat.isGoingDown)
+            boat.y -= 15 * screenRatioY;
+        else if (!boat.isGoingUp && boat.isGoingDown)
+            boat.y += 15 * screenRatioY;
 
         if (boat.y < 0)
             boat.y = 0;
@@ -362,11 +362,13 @@ public class GameView extends SurfaceView implements Runnable {
         point.y = (int) y;
 
         if (point.x < screenX / 2f && point.y > screenY / 2f) {
-            boat.y += 50 * screenRatioY;
-            //boat.isGoingUp = true;
+            //boat.y += 50 * screenRatioY;
+            boat.isGoingUp = false;
+            boat.isGoingDown = true;
         } else if (point.x < screenX / 2f && point.y < screenY / 2f) {
-            boat.y -= 50 * screenRatioY;
-            //boat.isGoingUp = true;
+            //boat.y -= 50 * screenRatioY;
+            boat.isGoingUp = true;
+            boat.isGoingDown = false;
         }
         if (point.x > screenX / 2f) {
             newTorpedo();
@@ -414,6 +416,8 @@ public class GameView extends SurfaceView implements Runnable {
     private void touchEnded(int lineID) {
         Path path = pathMap.get(lineID); // get the corresponding Path
         //bitmapCanvas.drawPath(path, paintLine); // draw to bitmapCanvas
+        boat.isGoingUp = false;
+        boat.isGoingDown = false;
         path.reset(); // reset the Path
     }
 

@@ -9,7 +9,7 @@ import static com.complementarycode.icecrusher.GameView.screenRatioY;
 
 public class Boat extends GameElement {
 
-    boolean isGoingUp = false;
+    boolean isGoingUp = false, isGoingDown = false;
     Bitmap boat;
     private GameView gameView;
 

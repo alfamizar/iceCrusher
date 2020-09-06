@@ -1,6 +1,5 @@
 package com.complementarycode.icecrusher;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Canvas;
@@ -13,21 +12,14 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.View;
-
-import androidx.core.view.MotionEventCompat;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import static android.view.MotionEvent.actionToString;
 import static com.complementarycode.icecrusher.MainActivity.prefs;
 
 public class GameView extends SurfaceView implements Runnable {
@@ -35,7 +27,6 @@ public class GameView extends SurfaceView implements Runnable {
     // used to determine whether user moved a finger enough to draw again
     private static final float TOUCH_TOLERANCE = 10;
 
-    private static final String DEBUG_TAG = "LOL";
     private final SoundPool soundPool;
     private Thread thread;
     private boolean isPlaying, isGameOver = false;
@@ -44,9 +35,7 @@ public class GameView extends SurfaceView implements Runnable {
     private Paint paint;
     private Iceberg[] icebergs;
     private Animal[] animals;
-    //private List<Health> health;
     private int numberOfIcebergs = 6, numberOfAnimals = 4; int missed = 0;
-    //private SharedPreferences prefs;
     private Random random;
     int sound;
     private List<Torpedo> torpedoes;
@@ -66,14 +55,10 @@ public class GameView extends SurfaceView implements Runnable {
 
         this.activity = activity;
 
-        //prefs = activity.getSharedPreferences("game", Context.MODE_PRIVATE);
-
         this.screenX = screenX;
         this.screenY = screenY;
         screenRatioX = screenX / 1920f;
-        //screenRatioX = 1920f / screenX;
         screenRatioY = screenY / 1080f;
-        //screenRatioY = 1080f / screenY;
 
         background1 = new Background(screenX, screenY, getResources());
         background2 = new Background(screenX, screenY, getResources());
@@ -90,13 +75,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         icebergs = new Iceberg[numberOfIcebergs];
         animals = new Animal[numberOfAnimals];
-
-//        for (int i = 0; i < boat.getHealth(); i++) {
-//            Health heart = new Health(screenY, getResources());
-//            health.add(heart);
-//        }
-
-        //health = new Health(screenY, getResources());
 
         for (int i = 0; i < numberOfIcebergs; i++) {
 
@@ -133,24 +111,14 @@ public class GameView extends SurfaceView implements Runnable {
     @Override
     public void run() {
         while (isPlaying) {
-            //long currentTime = System.currentTimeMillis();
             long frameStartTime;
-            //double elapsedTimeMS = currentTime - previousFrameTime;
             frameStartTime = System.nanoTime();
             update ();
-            //update(2.0);
             draw ();
             frameTime = (System.nanoTime() - frameStartTime) / 1000000;
-            //System.out.println("____________________________________________run__________________");
-            //previousFrameTime = currentTime;
-            //if (frameTime < MAX_FRAME_RATE) {
             if (frameTime < MAX_FRAME_RATE) {
                 sleep(MAX_FRAME_RATE - frameTime);
-                //System.out.println("____________________________________________if_run__________________" + (MAX_FRAME_RATE - frameTime) );
             }
-            //System.out.println("____________________________________________run_max_frame_time__________________" + previousFrameTime );
-            //System.out.println("____________________________________________if_run__________________" + (int) (previousFrameTime / 1000.0) );
-            //sleep ();
         }
     }
 
@@ -185,7 +153,6 @@ public class GameView extends SurfaceView implements Runnable {
 
         List<Torpedo> trash = new ArrayList<>();
 
-        //for (Torpedo torpedo : torpedoes) {
         for (int i = 0; i < torpedoes.size(); i++) {
 
             Torpedo torpedo = torpedoes.get(i);
@@ -195,7 +162,6 @@ public class GameView extends SurfaceView implements Runnable {
 
             torpedo.x += 50 * screenRatioX;
 
-            //for (int i = 0; i < numberOfIcebergs; i++)
             for (Iceberg iceberg : icebergs)
             {
                 if (Rect.intersects(iceberg.getCollisionShape(),
@@ -209,15 +175,6 @@ public class GameView extends SurfaceView implements Runnable {
                         iceberg.wasShot = true;
                     }
                 }
-                //Iceberg iceberg = icebergs[i];
-//                if (CollisionUtil.isCollisionDetected(iceberg.getIceberg(), iceberg.x, iceberg.y,
-//                        torpedo.getGameElement(), torpedo.x, torpedo.y)) {
-//
-//                    score++;
-//                    iceberg.x = -500;
-//                    torpedo.x = screenX + 500;
-//                    iceberg.wasShot = true;
-//                }
             }
             for (Animal animal : animals)
             {
@@ -233,9 +190,6 @@ public class GameView extends SurfaceView implements Runnable {
             }
         }
 
-//        for (Torpedo torpedo : trash)
-//            torpedoes.remove(torpedo);
-
         for (int i = 0; i < trash.size(); i++) {
             torpedoes.remove(trash.get(i));
         }
@@ -243,9 +197,6 @@ public class GameView extends SurfaceView implements Runnable {
         //for (int i = 0; i < numberOfIcebergs; i++)
 
         for (Iceberg iceberg : icebergs){
-//                if (Rect.intersects(iceberg.getCollisionShape(),
-//                        torpedo.getCollisionShape())) {
-            //Iceberg iceberg = icebergs[i];
 
             iceberg.x -= iceberg.speed;
 
@@ -272,7 +223,8 @@ public class GameView extends SurfaceView implements Runnable {
             if (Rect.intersects(iceberg.getCollisionShape(), boat.getCollisionShape())) {
                 if (CollisionUtil.isCollisionDetected(iceberg.getGameElement(), iceberg.x, iceberg.y,
                         boat.getGameElement(), boat.x, boat.y)) {
-                    boat.reduceHealth();
+                    //TODO
+//                    boat.reduceHealth();
 //                    if (boat.getHealth() < 0){
 //                        isGameOver = true;
 //                        return;
@@ -280,16 +232,11 @@ public class GameView extends SurfaceView implements Runnable {
                     isGameOver = true;
                     return;
                 }
-//                isGameOver = true;
-//                return;
             }
 
         }
 
         for (Animal animal : animals){
-//                if (Rect.intersects(iceberg.getCollisionShape(),
-//                        torpedo.getCollisionShape())) {
-            //Iceberg iceberg = icebergs[i];
 
             animal.x -= animal.speed;
 
@@ -315,12 +262,8 @@ public class GameView extends SurfaceView implements Runnable {
                     isGameOver = true;
                     return;
                 }
-//                isGameOver = true;
-//                return;
             }
-
         }
-
     }
 
     private void draw () {
@@ -362,6 +305,16 @@ public class GameView extends SurfaceView implements Runnable {
         }
     }
 
+    public void newTorpedo() {
+
+        soundPool.play(sound, 1, 1, 0, 0, 1);
+
+        Torpedo torpedo = new Torpedo(getResources());
+        torpedo.x = boat.x + boat.width;
+        torpedo.y = boat.y + (boat.height / 2);
+        torpedoes.add(torpedo);
+    }
+
     private void waitBeforeExiting() {
 
         try {
@@ -397,7 +350,6 @@ public class GameView extends SurfaceView implements Runnable {
         isPlaying = true;
         thread = new Thread(this);
         thread.start();
-
     }
 
     public void pause () {
@@ -408,7 +360,6 @@ public class GameView extends SurfaceView implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
     // handle touch event
@@ -454,20 +405,25 @@ public class GameView extends SurfaceView implements Runnable {
 
         // move to the coordinates of the touch
         path.moveTo(x, y);
-        point.x = (int) x;
-        point.y = (int) y;
-
-        if (point.x < screenX / 2f && point.y > screenY / 2f) {
-            //boat.y += 50 * screenRatioY;
-            boat.isGoingUp = false;
-            boat.isGoingDown = true;
-        } else if (point.x < screenX / 2f && point.y < screenY / 2f) {
-            //boat.y -= 50 * screenRatioY;
-            boat.isGoingUp = true;
-            boat.isGoingDown = false;
+        if (point != null){
+            point.x = (int) x;
+            point.y = (int) y;
         }
-        if (point.x > screenX / 2f) {
-            newTorpedo();
+
+
+        if (point != null){
+            if (point.x < screenX / 2f && point.y > screenY / 2f) {
+                //boat.y += 50 * screenRatioY;
+                boat.isGoingUp = false;
+                boat.isGoingDown = true;
+            } else if (point.x < screenX / 2f && point.y < screenY / 2f) {
+                //boat.y -= 50 * screenRatioY;
+                boat.isGoingUp = true;
+                boat.isGoingDown = false;
+            }
+            if (point.x > screenX / 2f) {
+                newTorpedo();
+            }
         }
     }
 
@@ -516,41 +472,4 @@ public class GameView extends SurfaceView implements Runnable {
         boat.isGoingDown = false;
         path.reset(); // reset the Path
     }
-
-
-
-
-//    @Override
-//    public boolean onTouchEvent(MotionEvent event) {
-//
-//        switch (event.getAction()) {
-//            case MotionEvent.ACTION_DOWN:
-//                if (event.getX() < screenX / 2f && event.getY() > screenY / 2f) {
-//                    boat.y += 50 * screenRatioY;
-//                    //boat.isGoingUp = true;
-//                } else if (event.getX() < screenX / 2f && event.getY() < screenY / 2f) {
-//                    boat.y -= 50 * screenRatioY;
-//                    //boat.isGoingUp = true;
-//                }
-//                if (event.getX() > screenX / 2f) {
-//                    newTorpedo();
-//                }
-//                break;
-//            case MotionEvent.ACTION_UP:
-//                boat.isGoingUp = false;
-//                break;
-//        }
-//        return true;
-//    }
-
-    public void newTorpedo() {
-
-        soundPool.play(sound, 1, 1, 0, 0, 1);
-
-        Torpedo torpedo = new Torpedo(getResources());
-        torpedo.x = boat.x + boat.width;
-        torpedo.y = boat.y + (boat.height / 2);
-        torpedoes.add(torpedo);
-    }
-    // Given an action int, returns a string description
 }

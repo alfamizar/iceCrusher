@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.MotionEvent;
-import android.view.View;
 import android.view.WindowManager;
 
 public class GameActivity extends AppCompatActivity {
@@ -25,18 +23,10 @@ public class GameActivity extends AppCompatActivity {
 
         gameView = new GameView(this, point.x, point.y);
 
-//        gameView.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View view, MotionEvent motionEvent) {
-//                gameView.newTorpedo();
-//                return false;
-//
-//            }
-//        });
-
         backgroundMusic = MediaPlayer.create(GameActivity.this, R.raw.backgroundmusic);
         backgroundMusic.setLooping(true);
         backgroundMusic.start();
+
         setContentView(gameView);
     }
 
@@ -56,7 +46,5 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //backgroundMusic.stop();
-        //backgroundMusic.release();
     }
 }

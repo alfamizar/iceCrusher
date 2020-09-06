@@ -22,9 +22,7 @@ public class MainActivity extends AppCompatActivity {
 
     static SharedPreferences prefs = null;
     TextView highScoreTxt;
-    private FrameLayout adContainerView;
     private AdView adView;
-    //public static SharedPreferences prefs = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,18 +59,48 @@ public class MainActivity extends AppCompatActivity {
             public void onInitializationComplete(InitializationStatus initializationStatus) { }
         });
 
-        adContainerView = findViewById(R.id.ad_view_container);
+        FrameLayout adContainerView = findViewById(R.id.ad_view_container);
         // Step 1 - Create an AdView and set the ad unit ID on it.
         adView = new AdView(this);
         adView.setAdUnitId("ca-app-pub-9030493879140814/7102688766");
+
+        //adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");//test APP ID
         adContainerView.addView(adView);
-        loadBanner();
+        // Since we're loading the banner based on the adContainerView size, we need to wait until this
+        // view is laid out before we can get the width.
+        adContainerView.post(new Runnable() {
+            @Override
+            public void run() {
+                loadBanner();
+            }
+        });
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (adView != null) {
+            adView.pause();
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        if (adView != null) {
+            adView.resume();
+        }
         updateHighScore();
+    }
+
+    /** Called before the activity is destroyed */
+    @Override
+    public void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 
     public void updateHighScore() {
@@ -111,5 +139,5 @@ public class MainActivity extends AppCompatActivity {
         // Step 3 - Get adaptive ad size and return for setting on the ad view.
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
-
 }
+

@@ -15,7 +15,7 @@ public class Iceberg extends GameElement {
             R.drawable.iceberg4, R.drawable.iceberg5, R.drawable.iceberg6};
     public int speed = 5;
     public boolean wasShot = true;
-    Bitmap iceberg1, iceberg2, iceberg3, iceberg4, iceberg5, iceberg6, iceberg;
+    Bitmap iceberg;
 
     Iceberg(Resources res) {
 
@@ -46,10 +46,6 @@ public class Iceberg extends GameElement {
             index = 0;
         }
     }
-
-//    Bitmap getIceberg() {
-//        return iceberg;
-//    }
 
     Bitmap getGameElement() {
         return iceberg;

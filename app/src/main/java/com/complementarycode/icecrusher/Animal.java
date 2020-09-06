@@ -15,7 +15,7 @@ public class Animal extends GameElement {
             R.drawable.polar3};
     public int speed = 5;
     public boolean wasShot = true;
-    Bitmap polarBear, polar1, polar2, polar3, animal;
+    Bitmap animal;
 
     Animal(Resources res) {
 
@@ -23,12 +23,12 @@ public class Animal extends GameElement {
 
         x = 0;
 
-        processOneIceberg();
+        processOneAnimal();
 
         y = -height;
     }
 
-    public void processOneIceberg() {
+    public void processOneAnimal() {
         animal = BitmapFactory.decodeResource(res, btmAnimals[index]);
 
         width = animal.getWidth();
@@ -46,10 +46,6 @@ public class Animal extends GameElement {
             index = 0;
         }
     }
-
-//    Bitmap getIceberg() {
-//        return iceberg;
-//    }
 
     Bitmap getGameElement() {
         return animal;

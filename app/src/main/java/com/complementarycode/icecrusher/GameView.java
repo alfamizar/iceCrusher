@@ -96,7 +96,7 @@ public class GameView extends SurfaceView implements Runnable {
 //            health.add(heart);
 //        }
 
-        health = new Health(screenY, getResources());
+        //health = new Health(screenY, getResources());
 
         for (int i = 0; i < numberOfIcebergs; i++) {
 
@@ -141,12 +141,12 @@ public class GameView extends SurfaceView implements Runnable {
             //update(2.0);
             draw ();
             frameTime = (System.nanoTime() - frameStartTime) / 1000000;
-            System.out.println("____________________________________________run__________________");
+            //System.out.println("____________________________________________run__________________");
             //previousFrameTime = currentTime;
             //if (frameTime < MAX_FRAME_RATE) {
             if (frameTime < MAX_FRAME_RATE) {
                 sleep(MAX_FRAME_RATE - frameTime);
-                System.out.println("____________________________________________if_run__________________" + (MAX_FRAME_RATE - frameTime) );
+                //System.out.println("____________________________________________if_run__________________" + (MAX_FRAME_RATE - frameTime) );
             }
             //System.out.println("____________________________________________run_max_frame_time__________________" + previousFrameTime );
             //System.out.println("____________________________________________if_run__________________" + (int) (previousFrameTime / 1000.0) );

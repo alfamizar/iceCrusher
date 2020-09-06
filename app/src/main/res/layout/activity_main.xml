@@ -51,5 +51,12 @@
         android:src="@drawable/ic_baseline_menu_24"
         android:scaleType="centerCrop"/>
 
+    <FrameLayout
+        android:id="@+id/ad_view_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"/>
+
 
 </RelativeLayout>

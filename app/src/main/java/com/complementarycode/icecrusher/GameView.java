@@ -62,12 +62,13 @@ public class GameView extends SurfaceView implements Runnable {
 
         background1 = new Background(screenX, screenY, getResources());
         background2 = new Background(screenX, screenY, getResources());
+        background2.x = screenX;
 
         boat = new Boat(this, screenY, getResources());
 
         torpedoes = new ArrayList<>();
 
-        background2.x = screenX;
+        //background2.x = screenX;
 
         paint = new Paint();
         paint.setTextSize(64);
@@ -251,7 +252,7 @@ public class GameView extends SurfaceView implements Runnable {
                 animal.x = screenX;
                 animal.y = random.nextInt(screenY - animal.height);
 
-                animal.wasShot = false;
+                //animal.wasShot = false;
             }
 
 

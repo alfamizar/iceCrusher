@@ -25,6 +25,7 @@ public class Iceberg extends GameElement {
 
         processOneIceberg();
 
+        //to place off the screen on the start
         y = -height;
     }
 

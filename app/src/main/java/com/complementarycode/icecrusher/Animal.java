@@ -14,7 +14,6 @@ public class Animal extends GameElement {
     private int [] btmAnimals = {R.drawable.polarbear, R.drawable.polar1, R.drawable.polar2,
             R.drawable.polar3};
     public int speed = 5;
-    public boolean wasShot = true;
     Bitmap animal;
 
     Animal(Resources res) {
@@ -24,7 +23,7 @@ public class Animal extends GameElement {
         x = 0;
 
         processOneAnimal();
-
+        //to place off the screen on the start
         y = -height;
     }
 
